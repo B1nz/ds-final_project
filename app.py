@@ -48,8 +48,8 @@ if model is not None:
         # Process date_time input
         dt = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
         hour = dt.hour
-        month = dt.strftime('%b').lower()
-        day = dt.strftime('%A').lower()
+        month = dt.strftime('%b').lower()  # Abbreviated month name
+        day = dt.strftime('%A').lower()    # Full day name
 
         am_rush, pm_rush, daytime, nighttime = get_time_of_day(hour)
 
