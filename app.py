@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 # Load the model
-with open('model.pickle', 'rb') as file:
+with open('uber_fare.pickle', 'rb') as file:
     model = pickle.load(file)
 
 # Function to determine the time of day
