@@ -41,15 +41,17 @@ if model is not None:
     # Define input function
     def get_user_input():
         # Input fields
-        date_time = st.text_input('Date and Time (YYYY-MM-DD HH:MM)', '2024-07-27 12:00')
+        date_time = st.date_input('Date', datetime.now())
+        time_input = st.time_input('Time', datetime.now().time())
+        date_time = datetime.combine(date_time, time_input)
+        
         distance = st.number_input('Distance (in kilometers)', min_value=0.0, step=0.1)
         passenger_count = st.number_input('Passenger Count', min_value=1, step=1)
 
         # Process date_time input
-        dt = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
-        hour = dt.hour
-        month = dt.strftime('%b').lower()  # Abbreviated month name
-        day = dt.strftime('%A').lower()    # Full day name
+        hour = date_time.hour
+        month = date_time.strftime('%b').lower()  # Abbreviated month name
+        day = date_time.strftime('%A').lower()    # Full day name
 
         am_rush, daytime, pm_rush, nighttime = set_time_features(hour)
 
