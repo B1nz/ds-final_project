@@ -35,7 +35,7 @@ if model is not None:
         am_rush = 6 <= hour < 10
         pm_rush = 16 <= hour < 20
         daytime = 10 <= hour < 16
-        nighttime = hour >= 19 or hour < 7
+        nighttime = hour >= 20 or hour < 6
         return am_rush, pm_rush, daytime, nighttime
 
     # Define your input function
