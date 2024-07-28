@@ -1,6 +1,20 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import subprocess
+import sys
+
+# Function to install a package
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+# Try to import xgboost and install if not available
+try:
+    import xgboost as xgb
+except ImportError as e:
+    install('xgboost')
+    import xgboost as xgb
+
 from datetime import datetime
 
 # Function to load the model
