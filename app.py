@@ -68,8 +68,8 @@ if model is not None:
         }
 
         # Fill missing month and day columns with 0
-        all_months = ['jan', 'feb', 'mar', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-        all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'saturday', 'sunday']
+        all_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         for m in all_months:
             if f'month_{m}' not in data:
                 data[f'month_{m}'] = 0
@@ -77,7 +77,12 @@ if model is not None:
             if f'day_{d}' not in data:
                 data[f'day_{d}'] = 0
 
+        # Ensure the order of columns
+        column_order = ['passenger_count', 'distance_km', 'am_rush', 'daytime', 'pm_rush', 'nighttime'] + \
+                       [f'month_{m}' for m in all_months] + \
+                       [f'day_{d}' for d in all_days]
         features = pd.DataFrame(data, index=[0])
+        features = features[column_order]  # Reorder columns
         return features
 
     # Streamlit app layout
