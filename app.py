@@ -78,9 +78,13 @@ if model is not None:
                 data[f'day_{d}'] = 0
 
         # Ensure the order of columns
-        column_order = ['passenger_count', 'distance_km', 'am_rush', 'daytime', 'pm_rush', 'nighttime'] + \
-                       [f'month_{m}' for m in all_months] + \
-                       [f'day_{d}' for d in all_days]
+        column_order = [
+            'passenger_count', 'distance_km', 'am_rush', 'daytime', 'pm_rush', 'nighttime', 
+            'month_aug', 'month_dec', 'month_feb', 'month_jan', 'month_jul', 'month_jun', 
+            'month_mar', 'month_may', 'month_nov', 'month_oct', 'month_sep', 
+            'day_monday', 'day_saturday', 'day_sunday', 'day_thursday', 'day_tuesday', 'day_wednesday'
+        ]
+
         features = pd.DataFrame(data, index=[0])
         features = features[column_order]  # Reorder columns
         return features
