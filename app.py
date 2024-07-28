@@ -49,7 +49,7 @@ if model is not None:
         dt = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
         hour = dt.hour
         month = dt.strftime('%b').lower()
-        day = dt.strftime('%a').lower()
+        day = dt.strftime('%A').lower()
 
         am_rush, pm_rush, daytime, nighttime = get_time_of_day(hour)
 
@@ -67,7 +67,7 @@ if model is not None:
 
         # Fill missing month and day columns with 0
         all_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-        all_days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+        all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         for m in all_months:
             if f'month_{m}' not in data:
                 data[f'month_{m}'] = 0
@@ -97,4 +97,3 @@ if model is not None:
         st.error(f"Error making predictions: {e}")
 else:
     st.error("Model could not be loaded.")
-    
