@@ -21,8 +21,7 @@ from datetime import datetime
 @st.cache_resource
 def load_model():
     try:
-        with open('uber_fare.pickle', 'rb') as file:
-            model = pickle.load(file)
+        model = pickle.load(open('uber_fare.pickle', 'rb'))
         return model
     except Exception as e:
         st.error(f"Error loading model: {e}")
