@@ -41,24 +41,22 @@ if model is not None:
     # Define input function
     def get_user_input():
         # Input fields
-        date_time = st.date_input('Date', datetime.now())
-        time_input = st.time_input('Time', datetime.now().time())
-        date_time = datetime.combine(date_time, time_input)
-        
+        date_time = st.text_input('Date and Time (YYYY-MM-DD HH:MM)', '2024-07-27 12:00')
         distance = st.number_input('Distance (in kilometers)', min_value=0.0, step=0.1)
         passenger_count = st.number_input('Passenger Count', min_value=1, step=1)
 
         # Process date_time input
-        hour = date_time.hour
-        month = date_time.strftime('%b').lower()  # Abbreviated month name
-        day = date_time.strftime('%A').lower()    # Full day name
+        dt = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
+        hour = dt.hour
+        month = dt.strftime('%b').lower()  # Abbreviated month name
+        day = dt.strftime('%A').lower()    # Full day name
 
         am_rush, daytime, pm_rush, nighttime = set_time_features(hour)
 
         # Create a dictionary of the inputs
         data = {
-            'distance_km': distance,
             'passenger_count': passenger_count,
+            'distance_km': distance,
             'am_rush': am_rush,
             'pm_rush': pm_rush,
             'daytime': daytime,
@@ -77,16 +75,16 @@ if model is not None:
             if f'day_{d}' not in data:
                 data[f'day_{d}'] = 0
 
-        # Ensure the order of columns
+        # Create DataFrame and reorder columns
+        features = pd.DataFrame(data, index=[0])
         column_order = [
             'passenger_count', 'distance_km', 'am_rush', 'daytime', 'pm_rush', 'nighttime', 
-            'month_aug', 'month_dec', 'month_feb', 'month_jan', 'month_jul', 'month_jun', 
-            'month_mar', 'month_may', 'month_nov', 'month_oct', 'month_sep', 
-            'day_monday', 'day_saturday', 'day_sunday', 'day_thursday', 'day_tuesday', 'day_wednesday'
+            'month_jan', 'month_feb', 'month_mar', 'month_apr', 'month_may', 'month_jun', 
+            'month_jul', 'month_aug', 'month_sep', 'month_oct', 'month_nov', 'month_dec', 
+            'day_monday', 'day_tuesday', 'day_wednesday', 'day_thursday', 'day_friday', 'day_saturday', 'day_sunday'
         ]
-
-        features = pd.DataFrame(data, index=[0])
         features = features[column_order]  # Reorder columns
+
         return features
 
     # Streamlit app layout
