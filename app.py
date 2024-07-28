@@ -30,15 +30,15 @@ def load_model():
 model = load_model()
 
 if model is not None:
-    # Function to determine the time of day
-    def get_time_of_day(hour):
-        am_rush = 6 <= hour < 10
-        pm_rush = 16 <= hour < 20
-        daytime = 10 <= hour < 16
-        nighttime = hour >= 20 or hour < 6
-        return am_rush, pm_rush, daytime, nighttime
+    # Function to set time features
+    def set_time_features(hour):
+        am_rush = 1 if 6 <= hour < 10 else 0
+        daytime = 1 if 10 <= hour < 16 else 0
+        pm_rush = 1 if 16 <= hour < 20 else 0
+        nighttime = 1 if (20 <= hour < 24) or (0 <= hour < 6) else 0
+        return am_rush, daytime, pm_rush, nighttime
 
-    # Define your input function
+    # Define input function
     def get_user_input():
         # Input fields
         date_time = st.text_input('Date and Time (YYYY-MM-DD HH:MM)', '2024-07-27 12:00')
@@ -51,11 +51,11 @@ if model is not None:
         month = dt.strftime('%b').lower()  # Abbreviated month name
         day = dt.strftime('%A').lower()    # Full day name
 
-        am_rush, pm_rush, daytime, nighttime = get_time_of_day(hour)
+        am_rush, daytime, pm_rush, nighttime = set_time_features(hour)
 
         # Create a dictionary of the inputs
         data = {
-            'distance_km': distance,  # Distance in kilometers
+            'distance_km': distance,
             'passenger_count': passenger_count,
             'am_rush': am_rush,
             'pm_rush': pm_rush,
@@ -66,8 +66,8 @@ if model is not None:
         }
 
         # Fill missing month and day columns with 0
-        all_months = ['jan', 'feb', 'mar', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-        all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'saturday', 'sunday']
+        all_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         for m in all_months:
             if f'month_{m}' not in data:
                 data[f'month_{m}'] = 0
