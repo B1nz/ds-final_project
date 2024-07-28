@@ -42,20 +42,20 @@ if model is not None:
     def get_user_input():
         # Input fields
         date_time = st.text_input('Date and Time (YYYY-MM-DD HH:MM)', '2024-07-27 12:00')
-        distance = st.number_input('Distance (in miles)', min_value=0.0, step=0.1)
+        distance = st.number_input('Distance (in kilometers)', min_value=0.0, step=0.1)
         passenger_count = st.number_input('Passenger Count', min_value=1, step=1)
 
         # Process date_time input
         dt = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
         hour = dt.hour
-        month = dt.strftime('%b').lower()
+        month = dt.strftime('%B').lower()
         day = dt.strftime('%A').lower()
 
         am_rush, pm_rush, daytime, nighttime = get_time_of_day(hour)
 
         # Create a dictionary of the inputs
         data = {
-            'distance_km': distance * 1.60934,  # Convert miles to kilometers
+            'distance_km': distance,  # Distance in kilometers
             'passenger_count': passenger_count,
             'am_rush': am_rush,
             'pm_rush': pm_rush,
@@ -66,7 +66,7 @@ if model is not None:
         }
 
         # Fill missing month and day columns with 0
-        all_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        all_months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
         all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
         for m in all_months:
             if f'month_{m}' not in data:
