@@ -32,8 +32,8 @@ model = load_model()
 if model is not None:
     # Function to determine the time of day
     def get_time_of_day(hour):
-        am_rush = 7 <= hour < 10
-        pm_rush = 16 <= hour < 19
+        am_rush = 6 <= hour < 10
+        pm_rush = 16 <= hour < 20
         daytime = 10 <= hour < 16
         nighttime = hour >= 19 or hour < 7
         return am_rush, pm_rush, daytime, nighttime
