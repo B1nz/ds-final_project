@@ -97,3 +97,4 @@ if model is not None:
         st.error(f"Error making predictions: {e}")
 else:
     st.error("Model could not be loaded.")
+    
