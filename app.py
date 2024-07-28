@@ -3,6 +3,7 @@ import pickle
 import pandas as pd
 import subprocess
 import sys
+from datetime import datetime
 
 # Function to install a package
 def install(package):
@@ -14,8 +15,6 @@ try:
 except ImportError as e:
     install('xgboost')
     import xgboost as xgb
-
-from datetime import datetime
 
 # Function to load the model
 @st.cache_resource
@@ -42,23 +41,40 @@ if model is not None:
     # Define your input function
     def get_user_input():
         # Input fields
-        time = st.text_input('Time (HH:MM)', '12:00')
+        date_time = st.text_input('Date and Time (YYYY-MM-DD HH:MM)', '2024-07-27 12:00')
         distance = st.number_input('Distance (in miles)', min_value=0.0, step=0.1)
         passenger_count = st.number_input('Passenger Count', min_value=1, step=1)
 
-        # Process time input
-        hour = int(time.split(':')[0])
+        # Process date_time input
+        dt = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
+        hour = dt.hour
+        month = dt.strftime('%b').lower()
+        day = dt.strftime('%A').lower()
+
         am_rush, pm_rush, daytime, nighttime = get_time_of_day(hour)
 
         # Create a dictionary of the inputs
         data = {
-            'distance': distance,
+            'distance_km': distance * 1.60934,  # Convert miles to kilometers
             'passenger_count': passenger_count,
             'am_rush': am_rush,
             'pm_rush': pm_rush,
             'daytime': daytime,
-            'nighttime': nighttime
+            'nighttime': nighttime,
+            f'month_{month}': 1,
+            f'day_{day}': 1
         }
+
+        # Fill missing month and day columns with 0
+        all_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        all_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        for m in all_months:
+            if f'month_{m}' not in data:
+                data[f'month_{m}'] = 0
+        for d in all_days:
+            if f'day_{d}' not in data:
+                data[f'day_{d}'] = 0
+
         features = pd.DataFrame(data, index=[0])
         return features
 
